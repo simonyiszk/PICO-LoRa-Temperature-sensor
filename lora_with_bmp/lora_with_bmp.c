@@ -10,7 +10,7 @@
 extern int battery_level();
 
 
-#define SAMPLE_CYCLE_AWAIT_MS 5000
+#define SAMPLE_CYCLE_AWAIT_MS 1000
 
 
 // start of blink initialization
@@ -67,9 +67,13 @@ int main() {
         int32_t pressure = 0;
         bmp280_measure(&temperature, &pressure, &params);
 
+        transmit_int32('t');
+        sleep_ms(1000);
         transmit_int32(temperature);
         printf("%.3f\n", temperature / 1000.f);
         printf("temperature: %08ld\n", temperature);
+        sleep_ms(1000);
+        transmit_int32('p');
         sleep_ms(1000);
         transmit_int32(pressure);
         printf("pressure: %08ld\n", pressure);

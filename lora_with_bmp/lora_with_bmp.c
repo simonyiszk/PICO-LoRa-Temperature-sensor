@@ -8,6 +8,9 @@
 #include "lora_handler.h"
 #include "bmp_handler.h"
 extern int battery_level();
+extern void oled_draw_string(int, int, const char*);
+extern void oled_update();
+extern void i2c_oled_setup();
 
 
 #define SAMPLE_CYCLE_AWAIT_MS 1000
@@ -57,8 +60,16 @@ void led_toggle(){
 int main() {
     stdio_init_all();
     uart_lora_setup();
+
+    i2c_init(I2C_ID, 400 * 1000);
+    gpio_set_function(I2C_SDA_PIN, GPIO_FUNC_I2C);
+    gpio_set_function(I2C_SCL_PIN, GPIO_FUNC_I2C);
+    gpio_pull_up(I2C_SDA_PIN);
+    gpio_pull_up(I2C_SCL_PIN);
+
     struct bmp280_calib_param params;
     i2c_bmp280_setup(&params);
+    i2c_oled_setup();
     pico_led_init();
 
 
@@ -66,6 +77,15 @@ int main() {
         int32_t temperature = 0;
         int32_t pressure = 0;
         bmp280_measure(&temperature, &pressure, &params);
+
+        char temp_display[32];
+        char pressure_display[32];
+        snprintf(temp_display, 10, "%.2f °C", temperature / 100.0);
+        snprintf(pressure_display, 12, "%.3f kPa", pressure / 1000.0);
+
+        oled_draw_string(10, 2, temp_display);
+        oled_draw_string(10, 4, pressure_display);
+        oled_update();
 
         transmit_int32('t');
         sleep_ms(1000);

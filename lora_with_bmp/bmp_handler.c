@@ -2,11 +2,11 @@
 #include <stdint.h>
 
 void i2c_bmp280_setup(struct bmp280_calib_param* params){
-    i2c_init(I2C_ID, 100 * 1000); //how much?
-    gpio_set_function(I2C_SDA_PIN, GPIO_FUNC_I2C);
-    gpio_set_function(I2C_SCL_PIN, GPIO_FUNC_I2C);
-    gpio_pull_up(I2C_SDA_PIN);
-    gpio_pull_up(I2C_SCL_PIN);
+    // i2c_init(I2C_ID, 100 * 1000); //how much?
+    // gpio_set_function(I2C_SDA_PIN, GPIO_FUNC_I2C);
+    // gpio_set_function(I2C_SCL_PIN, GPIO_FUNC_I2C);
+    // gpio_pull_up(I2C_SDA_PIN);
+    // gpio_pull_up(I2C_SCL_PIN);
     // bmp280_reset();
     bmp280_init();
 

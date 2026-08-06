@@ -49,30 +49,6 @@ int uart_lora_setup()
     return 1;
 }
 
-// void strcpy_xbytes(char* dest, char* src, uint8_t x){
-//     uint32_t it = 0;
-//     while(x--) dest[it] = src[it++];
-// }
-
-// void transmit_int32(int32_t value)
-// {
-//     uint8_t bytes[4];
-
-//     bytes[0] = (value >> 24) & 0xFF;
-//     bytes[1] = (value >> 16) & 0xFF;
-//     bytes[2] = (value >> 8) & 0xFF;
-//     bytes[3] = value & 0xFF;
-
-//     char cmd[32];
-
-//     char msg_start[] = "radio tx ";
-//     char msg_end[] = " 1\r\n";
-//     strcpy_xbytes(&cmd[0], &msg_start[0], 9);
-//     // char* valuemsg = (char*)&value;
-//     strcpy_xbytes(&cmd[9], (char*)&bytes, 4);
-//     strcpy_xbytes(&cmd[13], &msg_end[0], 5);
-//     uart_puts(UART_ID, cmd);
-// }
 
 void transmit_int32(int32_t value)
 {

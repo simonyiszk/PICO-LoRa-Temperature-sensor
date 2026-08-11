@@ -34,6 +34,7 @@ add_executable(lora_with_bmp
     bmp_handler.c
     battery.c
     oled96.c
+    lightsensor.c
 )
 
 pico_set_program_name(lora_with_bmp "lora_with_bmp")

@@ -16,10 +16,11 @@ void oled_init(void) {
         0x20, 0x00, // Memory Addressing Mode: Horizontal
         0xA1,       // Segment Re-map (A0/A1 flip horizontal)
         0xC8,       // COM Output Scan Direction (C0/C8 flip vertical)
-        0xDA, 0x02, // Set COM Pins Hardware Configuration
+        0xDA, 0x12, // Set COM Pins Hardware Configuration
         0x81, 0xCF, // Set Contrast Control
         0xD9, 0xF1, // Set Pre-charge Period
         0xDB, 0x40, // Set VCOMH Deselect Level
+        0x2E,       // Deactivate Scroll
         0xA4,       // Entire Display ON (Resume to RAM)
         0xA6,       // Normal Display (A7 for Inverted)
         0xAF        // Display On

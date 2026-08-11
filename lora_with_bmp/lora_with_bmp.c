@@ -10,7 +10,9 @@
 extern int battery_level();
 extern void oled_draw_string(int, int, const char*);
 extern void oled_update();
+extern void oled_clear();
 extern void i2c_oled_setup();
+extern uint16_t lightsensor_cycle();
 
 
 #define SAMPLE_CYCLE_AWAIT_MS 1000
@@ -76,15 +78,22 @@ int main() {
     while(1){
         int32_t temperature = 0;
         int32_t pressure = 0;
+        uint16_t light = 0;
         bmp280_measure(&temperature, &pressure, &params);
+        light = lightsensor_cycle();
 
         char temp_display[32];
         char pressure_display[32];
-        snprintf(temp_display, 10, "%.2f °C", temperature / 100.0);
-        snprintf(pressure_display, 12, "%.3f kPa", pressure / 1000.0);
+        char light_data_display[32];
+        oled_clear();
+        snprintf(temp_display, 10, "%.2f °C\0", temperature / 100.0);
+        snprintf(pressure_display, 12, "%.3f kPa\0", pressure / 1000.0);
+        snprintf(light_data_display, 10, "%.2f lx\0", light / 100.0);
 
-        oled_draw_string(10, 2, temp_display);
-        oled_draw_string(10, 4, pressure_display);
+        oled_draw_string(10, 3, temp_display);
+        oled_draw_string(10, 5, pressure_display);
+        oled_draw_string(10, 7, light_data_display);
+        
         oled_update();
 
         transmit_int32('t');

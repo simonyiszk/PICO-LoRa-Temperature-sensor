@@ -2,12 +2,7 @@
 #include "pico/stdlib.h"
 #include "datatypedef.h"
 #include <stdio.h>
-
-#define UART_ID uart0
-#define BAUD_RATE 115200
-#define UART_TX_PIN 0
-#define UART_RX_PIN 1
-#define LORA_RESET_PIN 2
+#include "ports.h"
 
 
 //user settings:
@@ -50,3 +45,5 @@ void strcpy_xbytes(char* dest, char* src, uint8_t x);
 
 
 void transmit_int32(int32_t value);
+
+void create_lora_package(char* msg_buff, int32_t temp, int32_t pressure, uint16_t lux);

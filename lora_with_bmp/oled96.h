@@ -3,12 +3,9 @@
 #include "pico/stdlib.h"
 #include "hardware/i2c.h"
 #include "datatypedef.h"
+#include "ports.h"
 
-#define I2C_PORT i2c1
-#define I2C_SDA_PIN 6
-#define I2C_SCL_PIN 7
 #define OLED_ADDR 0x3C
-
 #define OLED_WIDTH 128
 #define OLED_HEIGHT 64
 #define OLED_BUF_LEN (OLED_WIDTH * OLED_HEIGHT / 8)
@@ -75,7 +72,9 @@ static const uint8_t font5x7[][5] = {
     {0x3F, 0x40, 0x38, 0x40, 0x3F}, // W
     {0x63, 0x14, 0x08, 0x14, 0x63}, // X
     {0x07, 0x08, 0x70, 0x08, 0x07}, // Y
-    {0x61, 0x51, 0x49, 0x45, 0x43}  // Z
+    {0x61, 0x51, 0x49, 0x45, 0x43},  // Z
+    //special characters begin
+    {0x00, 0x00, 0x07, 0x05, 0x07} //°degree sign (not ASCII 91!)
 };
 
 static void oled_send_cmd(uint8_t cmd);

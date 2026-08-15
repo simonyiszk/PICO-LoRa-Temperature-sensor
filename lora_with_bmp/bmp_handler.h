@@ -1,11 +1,9 @@
 #include "hardware/i2c.h"
 #include "pico/stdlib.h"
 #include "datatypedef.h"
+#include "ports.h"
 
-//check this
-#define I2C_ID i2c1
-#define I2C_SCL_PIN 6
-#define I2C_SDA_PIN 7
+
 // device has default bus address of 0x76
 #define ADDR _u(0x76)
 

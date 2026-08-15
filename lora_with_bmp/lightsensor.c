@@ -1,10 +1,8 @@
 #include "pico/stdlib.h"
 #include "hardware/i2c.h"
 #include "datatypedef.h"
+#include "ports.h"
 
-#define I2C_PORT i2c1
-#define I2C_SDA_PIN 6
-#define I2C_SCL_PIN 7
 #define I2C_ADDR_H 0x5C
 #define I2C_ADDR_L 0x23 //will use this, ADDR pin needs to be pulled down
 

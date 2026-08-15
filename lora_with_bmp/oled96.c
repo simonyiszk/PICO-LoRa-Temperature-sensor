@@ -31,20 +31,41 @@ void oled_init(void) {
     }
 }
 
-void oled_update(void) {
+void oled_update(void) 
+
+{
+    // {
+        // oled_send_cmd(0x21); // Set Column Address
+        // oled_send_cmd(0);
+        // oled_send_cmd(OLED_WIDTH - 1);
+    
+        // oled_send_cmd(0x22); // Set Page Address
+        // oled_send_cmd(0);
+        // oled_send_cmd((OLED_HEIGHT / 8) - 1);
+    
+        // uint8_t temp[OLED_BUF_LEN + 1];
+        // temp[0] = 0x40; // Co = 0, D/C# = 1 (Data byte header)
+        // memcpy(&temp[1], oled_buffer, OLED_BUF_LEN);
+    
+        // i2c_write_blocking(I2C_PORT, OLED_ADDR, temp, sizeof(temp), false);
+    // }
     oled_send_cmd(0x21); // Set Column Address
     oled_send_cmd(0);
     oled_send_cmd(OLED_WIDTH - 1);
-
+    
     oled_send_cmd(0x22); // Set Page Address
     oled_send_cmd(0);
     oled_send_cmd((OLED_HEIGHT / 8) - 1);
 
-    uint8_t temp[OLED_BUF_LEN + 1];
-    temp[0] = 0x40; // Co = 0, D/C# = 1 (Data byte header)
-    memcpy(&temp[1], oled_buffer, OLED_BUF_LEN);
+    for (int page = 0; page < 8; page++)
+    {        
+        uint8_t packet[129];
+        packet[0] = 0x40;
 
-    i2c_write_blocking(I2C_PORT, OLED_ADDR, temp, sizeof(temp), false);
+        memcpy(packet + 1, &oled_buffer[page * 128], 128);
+
+        i2c_write_blocking(I2C_PORT, OLED_ADDR, packet, 129, false);
+    }
 }
 
 void oled_clear(void) {
@@ -54,11 +75,11 @@ void oled_clear(void) {
 void oled_draw_char(int x, int page, char c) {
     if (x < 0 || x > OLED_WIDTH - 6 || page < 0 || page > 7) return;
 
+    int idx = c - ' ';
     // Convert lowercase to uppercase for this minimal font
     if (c >= 'a' && c <= 'z') c -= 32;
     if (c < ' ' || c > 'Z') c = ' ';
 
-    int idx = c - ' ';
     for (int i = 0; i < 5; i++) {
         oled_buffer[page * OLED_WIDTH + x + i] = font5x7[idx][i];
     }

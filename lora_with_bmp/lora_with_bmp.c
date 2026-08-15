@@ -15,8 +15,7 @@ extern void i2c_oled_setup();
 extern uint16_t lightsensor_cycle();
 
 
-#define SAMPLE_CYCLE_AWAIT_MS 1000
-
+#define SAMPLE_CYCLE_AWAIT_MS 2000
 
 // start of blink initialization
 #ifdef CYW43_WL_GPIO_LED_PIN
@@ -63,7 +62,7 @@ int main() {
     stdio_init_all();
     uart_lora_setup();
 
-    i2c_init(I2C_ID, 400 * 1000);
+    i2c_init(I2C_PORT, 400 * 1000);
     gpio_set_function(I2C_SDA_PIN, GPIO_FUNC_I2C);
     gpio_set_function(I2C_SCL_PIN, GPIO_FUNC_I2C);
     gpio_pull_up(I2C_SDA_PIN);
@@ -73,7 +72,6 @@ int main() {
     i2c_bmp280_setup(&params);
     i2c_oled_setup();
     pico_led_init();
-
 
     while(1){
         int32_t temperature = 0;
@@ -93,21 +91,15 @@ int main() {
         oled_draw_string(10, 3, temp_display);
         oled_draw_string(10, 5, pressure_display);
         oled_draw_string(10, 7, light_data_display);
-        
         oled_update();
 
-        transmit_int32('t');
-        sleep_ms(1000);
-        transmit_int32(temperature);
-        printf("%.3f\n", temperature / 1000.f);
-        printf("temperature: %08ld\n", temperature);
-        sleep_ms(1000);
-        transmit_int32('p');
-        sleep_ms(1000);
-        transmit_int32(pressure);
-        printf("pressure: %08ld\n", pressure);
-        //sleep_ms(1000);
-        //transmit_int32((int32_t)battery_level());
+        char cmd[64];
+        char package[32];
+        create_lora_package(package, temperature, pressure, light);
+
+        snprintf(cmd, sizeof(cmd), "radio tx %s 1\r\n", package);
+        // snprintf(cmd, sizeof(cmd), "radio tx %04X0123%04X0123%04X 1\r\n", temperature, pressure - (1 << 16), light);
+        uart_puts(UART_ID, cmd);
 
         sleep_ms(SAMPLE_CYCLE_AWAIT_MS);
         led_toggle();

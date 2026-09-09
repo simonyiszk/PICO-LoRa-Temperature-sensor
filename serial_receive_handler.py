@@ -23,6 +23,8 @@ lux_data = collections.deque(maxlen=MAX_POINTS)
 
 try:
     ser = serial.Serial(PORT, BAUD, timeout=0.1)
+    time.sleep(0.5)
+    ser.write(b"radio rx 0\r\n")
 except serial.SerialException as e:
     sys.exit(f"Serial connection failed: {e}")
 

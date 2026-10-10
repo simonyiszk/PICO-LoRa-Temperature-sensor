@@ -19,7 +19,7 @@ extern uint16_t lightsensor_cycle();
 
 // start of blink initialization
 #ifdef CYW43_WL_GPIO_LED_PIN
-#include "pico/cyw43_arch.h"
+#include "pico/cyw43_arch.h" 
 #endif
 
 #ifndef LED_DELAY_MS
@@ -102,7 +102,7 @@ int main() {
         uart_puts(UART_ID, cmd);
 
         sleep_ms(SAMPLE_CYCLE_AWAIT_MS);
-        led_toggle();
+        //led_toggle();
     }
 
     return 0;
